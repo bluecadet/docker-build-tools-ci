@@ -9,6 +9,19 @@ ADD . /build-tools-ci
 
 # Collect the components we need for this image
 RUN apt-get update
+
+# Add node tooling.
+# A lot of Drupal/WordPress sites have build processes
+# that require these.
+RUN curl -sSL https://deb.nodesource.com/setup_8.x | bash -
+RUN apt-get --purge remove node
+RUN apt-get --purge remove nodejs
+RUN apt-get install -y nodejs
+RUN apt-get install -y build-essential
+RUN node -v
+RUN npm --global install yarn
+RUN npm install --global gulp-cli
+
 RUN composer -n global require -n "hirak/prestissimo:^0.3"
 RUN /usr/bin/env COMPOSER_BIN_DIR=/usr/local/bin composer -n --working-dir=/usr/local/share require pantheon-systems/terminus "^1"
 RUN /usr/bin/env COMPOSER_BIN_DIR=/usr/local/bin composer -n --working-dir=/usr/local/share require drush/drush "~8"

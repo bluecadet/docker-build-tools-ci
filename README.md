@@ -1,6 +1,6 @@
 # Docker PHP CI
 
-This is the source Dockerfile for the [pantheon-public/build-tools-ci](https://quay.io/repository/pantheon-public/build-tools-ci) docker image.
+This is the source Dockerfile for the [peteinge/build-tools](https://quay.io/repository/peteinge/build-tools) docker image.
 
 ## Image Contents
 

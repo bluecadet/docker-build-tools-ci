@@ -26,6 +26,9 @@ RUN docker-php-ext-install gmp
 RUN docker-php-ext-configure mcrypt
 RUN docker-php-ext-install mcrypt
 
+RUN echo extension=gmp.so > /usr/local/etc/php/conf.d/gmp.ini
+RUN echo extension=mcrypt.so > /usr/local/etc/php/conf.d/mcrypt.ini
+
 env TERMINUS_PLUGINS_DIR /usr/local/share/terminus-plugins
 RUN mkdir -p /usr/local/share/terminus-plugins
 RUN composer -n create-project -d /usr/local/share/terminus-plugins pantheon-systems/terminus-build-tools-plugin:^1

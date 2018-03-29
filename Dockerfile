@@ -17,6 +17,15 @@ RUN /usr/bin/env composer -n --working-dir=/usr/local/share/drush require drush/
 RUN ln -fs /usr/local/share/drush/vendor/drush/drush/drush /usr/local/bin/drush
 RUN chmod +x /usr/local/bin/drush
 
+# Install the gmp and mcrypt extensions
+RUN apt-get update -y
+RUN apt-get install -y libgmp-dev re2c libmhash-dev libmcrypt-dev file
+RUN ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/local/include/
+RUN docker-php-ext-configure gmp 
+RUN docker-php-ext-install gmp
+RUN docker-php-ext-configure mcrypt
+RUN docker-php-ext-install mcrypt
+
 env TERMINUS_PLUGINS_DIR /usr/local/share/terminus-plugins
 RUN mkdir -p /usr/local/share/terminus-plugins
 RUN composer -n create-project -d /usr/local/share/terminus-plugins pantheon-systems/terminus-build-tools-plugin:^1

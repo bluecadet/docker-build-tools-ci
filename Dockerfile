@@ -38,3 +38,40 @@ RUN composer -n create-project -d /usr/local/share/terminus-plugins pantheon-sys
 RUN composer -n create-project -d /usr/local/share/terminus-plugins pantheon-systems/terminus-composer-plugin:^1
 RUN composer -n create-project -d /usr/local/share/terminus-plugins pantheon-systems/terminus-drupal-console-plugin:^1
 RUN composer -n create-project -d /usr/local/share/terminus-plugins pantheon-systems/terminus-mass-update:^1
+
+# From ataylorme/docker-php-Advanced-WordPress-on-Pantheon
+# Install wget
+RUN \
+	echo -e "\nInstalling wget..." && \
+	apt-get install -y wget
+
+# Install openssl
+RUN \
+	echo -e "\nInstalling openssl..." && \
+	apt-get install -y openssl
+
+# Install rsync
+RUN \
+	echo -e "\nInstalling rsync..." && \
+	apt-get install -y rsync
+
+# Install jq
+RUN \
+	echo -e "\nInstalling jq..." && \
+	apt-get install -y jq
+
+# Install ssh
+RUN \
+	echo -e "\nInstalling ssh..." && \
+	apt-get install -y openssh-client
+
+# Install Terminus
+RUN \
+	echo -e "\nInstalling Terminus 1.x..." && \
+	/usr/bin/env COMPOSER_BIN_DIR=$HOME/bin composer --working-dir=$HOME require pantheon-systems/terminus "^1"
+
+# Enable Composer parallel downloads
+RUN \
+	echo -e "\nInstalling hirak/prestissimo for parallel Composer downloads..." && \
+	composer global require -n "hirak/prestissimo:^0.3"
+

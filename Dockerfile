@@ -1,6 +1,5 @@
 # Use an official Python runtime as a parent image
-# FROM drupaldocker/php:7.1-cli
-FROM drupalci/php-7.1-apache:production
+FROM drupaldocker/php:7.1-cli
 
 # Set the working directory to /build-tools-ci
 WORKDIR /build-tools-ci
@@ -41,38 +40,81 @@ RUN composer -n create-project -d /usr/local/share/terminus-plugins pantheon-sys
 RUN composer -n create-project -d /usr/local/share/terminus-plugins pantheon-systems/terminus-mass-update:^1
 
 # From ataylorme/docker-php-Advanced-WordPress-on-Pantheon
-# Install wget
-RUN \
-	echo -e "\nInstalling wget..." && \
-	apt-get install -y wget
 
-# Install openssl
-RUN \
-	echo -e "\nInstalling openssl..." && \
-	apt-get install -y openssl
+ARG BACKSTOPJS_VERSION
 
-# Install rsync
+ENV \
+	PHANTOMJS_VERSION=2.1.7 \
+	CASPERJS_VERSION=1.1.4 \
+	SLIMERJS_VERSION=0.10.3 \
+	BACKSTOPJS_VERSION=$BACKSTOPJS_VERSION \
+	# Workaround to fix phantomjs-prebuilt installation errors
+	# See https://github.com/Medium/phantomjs/issues/707
+	NPM_CONFIG_UNSAFE_PERM=true
+RUN apt-get update && \
+	apt-get install -y git sudo software-properties-common python-software-properties
+
+RUN sudo npm install -g --unsafe-perm=true --allow-root phantomjs@${PHANTOMJS_VERSION}
+RUN sudo npm install -g --unsafe-perm=true --allow-root casperjs@${CASPERJS_VERSION}
+RUN sudo npm install -g --unsafe-perm=true --allow-root slimerjs@${SLIMERJS_VERSION}
+RUN sudo npm install -g --unsafe-perm=true --allow-root backstopjs@${BACKSTOPJS_VERSION}
+
+RUN wget https://dl-ssl.google.com/linux/linux_signing_key.pub && sudo apt-key add linux_signing_key.pub
+RUN sudo add-apt-repository "deb http://dl.google.com/linux/chrome/deb/ stable main"
+
+RUN	apt-get -y update && \
+	apt-get -y install google-chrome-stable
+
+RUN apt-get install -y firefox-esr
+
+WORKDIR /src
+
+ENTRYPOINT ["backstop"]
+
+
+
+
+# Set environment variables
+ENV \
+	BACKSTOP_CRAWL_VERSION=2.3.1
+
+# Run updates
 RUN \
-	echo -e "\nInstalling rsync..." && \
-	apt-get install -y rsync
+	echo -e "\nRunning apt-get update..." && \
+	 apt-get update
 
 # Install jq
 RUN \
 	echo -e "\nInstalling jq..." && \
 	apt-get install -y jq
 
+# Install wget
+RUN \
+	echo -e "\nInstalling wget..." && \
+	apt-get install -y wget
+
+
+# Install openssl
+RUN \
+	echo -e "\nInstalling openssl..." && \
+	apt-get install -y openssl
+
+# Install git
+RUN \
+	echo -e "\nInstalling git..." && \
+	apt-get install -y git
+
 # Install ssh
 RUN \
 	echo -e "\nInstalling ssh..." && \
-	apt-get install -y openssh-client
+	apt-get install -y ssh
 
-# Install Terminus
+# Install rsync
 RUN \
-	echo -e "\nInstalling Terminus 1.x..." && \
-	/usr/bin/env COMPOSER_BIN_DIR=$HOME/bin composer --working-dir=$HOME require pantheon-systems/terminus "^1"
+	echo -e "\nInstalling rsync..." && \
+	apt-get install -y rsync
 
-# Enable Composer parallel downloads
+# Install backstop-crawl globally
 RUN \
-	echo -e "\nInstalling hirak/prestissimo for parallel Composer downloads..." && \
-	composer global require -n "hirak/prestissimo:^0.3"
-
+	echo -e "\nInstalling backstop-crawl v${BACKSTOP_CRAWL_VERSION}..." && \
+	npm install -g backstop-crawl@${BACKSTOP_CRAWL_VERSION}

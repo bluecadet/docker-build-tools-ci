@@ -1,5 +1,6 @@
 # Use an official Python runtime as a parent image
-FROM drupaldocker/php:7.1-cli
+# FROM drupaldocker/php:7.1-cli
+FROM drupalci/php-7.1-apache:production
 
 # Set the working directory to /build-tools-ci
 WORKDIR /build-tools-ci

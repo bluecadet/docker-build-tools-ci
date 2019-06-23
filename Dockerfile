@@ -43,6 +43,12 @@ RUN apt-get install -y ruby jq curl
 RUN gem install circle-cli
 RUN composer -n global require -n "hirak/prestissimo:^0.3"
 
+
+# Add node.js
+RUN apt-get update
+RUN apt-get install -y nodejs
+RUN apt-get install -y build-essential
+
 # Create an unpriviliged testuser
 RUN groupadd -g 999 tester && \
     useradd -r -m -u 999 -g tester tester && \
@@ -100,9 +106,5 @@ RUN mkdir ~/behat && \
         "behat/mink-extension:^2.2" \
         "behat/mink-goutte-driver:^1.2" \
         "drupal/drupal-extension:*"
-
-# Add node.js
-RUN apt-get install -y nodejs
-RUN apt-get install -y build-essential
 
 ENTRYPOINT ["dumb-init", "--"]

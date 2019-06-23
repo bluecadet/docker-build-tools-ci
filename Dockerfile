@@ -101,4 +101,8 @@ RUN mkdir ~/behat && \
         "behat/mink-goutte-driver:^1.2" \
         "drupal/drupal-extension:*"
 
+# Add node.js
+RUN apt-get install -y nodejs
+RUN apt-get install -y build-essential
+
 ENTRYPOINT ["dumb-init", "--"]

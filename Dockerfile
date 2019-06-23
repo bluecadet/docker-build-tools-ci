@@ -44,10 +44,16 @@ RUN gem install circle-cli
 RUN composer -n global require -n "hirak/prestissimo:^0.3"
 
 
-# Add node.js
-RUN apt-get update
-RUN apt-get install -y nodejs
-RUN apt-get install -y build-essential
+# Node.js
+RUN curl -sL https://deb.nodesource.com/setup_12.x -o nodesource_setup.sh
+RUN bash nodesource_setup.sh
+RUN apt-get install nodejs -y
+RUN npm install npm@6.9.0 -g
+RUN command -v node
+RUN command -v npm
+# Display versions
+RUN node -v
+RUN npm -v
 
 # Create an unpriviliged testuser
 RUN groupadd -g 999 tester && \

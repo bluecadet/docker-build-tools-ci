@@ -14,7 +14,9 @@ RUN apt-get update && \
         libjpeg62-turbo-dev \
         zlib1g-dev \
         libicu-dev \
-        g++
+        g++ \
+        software-properties-common \
+        gnupg
 
 # Add necessary PHP Extensions
 RUN docker-php-ext-configure intl

@@ -1,5 +1,5 @@
 # Docker PHP CI
-[![docker pull quay.io/peteinge/build-tools](https://img.shields.io/badge/image-quay-blue.svg)](https://quay.io/repository/peteinge/build-tools)
+[![docker pull quay.io/peteinge/build-tools](https://quay.io/repository/peteinge/build-tools/status)](https://quay.io/repository/peteinge/build-tools)
 
 This is the source Dockerfile for the [peteinge/build-tools](https://quay.io/repository/peteinge/build-tools) docker image.
 

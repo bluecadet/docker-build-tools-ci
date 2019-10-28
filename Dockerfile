@@ -108,7 +108,7 @@ RUN mkdir ~/behat && \
         "drupal/drupal-extension:*"
 
 # Install A11y Machine Globally
-RUN npm install -g the-a11y-machine
+# RUN npm install -g the-a11y-machine
 
 # Install Pa11y Globally
 RUN npm install -g pa11y-ci

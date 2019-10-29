@@ -41,7 +41,7 @@ ADD . /build-tools-ci
 
 # Collect the components we need for this image
 RUN apt-get update
-RUN apt-get install -y ruby jq curl rsync
+RUN apt-get install -y ruby jq curl rsync nano
 RUN gem install circle-cli
 
 # Parallel Composer downloads

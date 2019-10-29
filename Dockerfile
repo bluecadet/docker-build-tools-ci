@@ -111,7 +111,9 @@ RUN mkdir ~/behat && \
 # RUN npm install -g the-a11y-machine
 
 # Install Pa11y Globally
+RUN npm install -g pa11y
 RUN npm install -g pa11y-ci
+RUN npm install -g pa11y-reporter-html
 
 # Install Axe CLI Globally
 RUN npm install axe-cli -g

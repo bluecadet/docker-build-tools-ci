@@ -116,4 +116,6 @@ RUN npm install -g pa11y-ci
 RUN npm install -g pa11y-ci-reporter-html
 
 # Install Axe CLI Globally
-RUN npm install axe-cli -g
+RUN npm install -g axe-cli
+
+RUN npm install -g markdown-to-html

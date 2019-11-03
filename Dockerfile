@@ -111,5 +111,6 @@ RUN mkdir ~/behat && \
         "behat/mink-goutte-driver:^1.2" \
         "drupal/drupal-extension:*"
 
+
 # Install html validator
 RUN npm i site-validator-cli -g

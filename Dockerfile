@@ -119,3 +119,5 @@ RUN npm install -g pa11y-ci-reporter-html
 RUN npm install -g axe-cli
 
 RUN npm install -g markdown-to-html
+
+RUN npm install -g minimist

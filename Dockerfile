@@ -52,10 +52,8 @@ RUN composer -n global require -n "hirak/prestissimo:^0.3"
 
 # ADD IN BACKSTOPJS
 
-ARG BACKSTOPJS_VERSION
-
 ENV \
-  BACKSTOPJS_VERSION=$BACKSTOPJS_VERSION
+  BACKSTOPJS_VERSION=5.0.1
 
 # Base packages
 RUN apt-get update && \

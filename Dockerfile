@@ -114,7 +114,3 @@ RUN composer -n create-project --no-dev -d /usr/local/share/terminus-plugins pan
 RUN composer -n create-project --no-dev -d /usr/local/share/terminus-plugins pantheon-systems/terminus-mass-update:^1.1
 RUN composer -n create-project --no-dev -d /usr/local/share/terminus-plugins pantheon-systems/terminus-aliases-plugin:^1.2
 RUN composer -n create-project --no-dev -d /usr/local/share/terminus-plugins pantheon-systems/terminus-site-clone-plugin:^2
-
-WORKDIR /src
-
-ENTRYPOINT ["backstop"]

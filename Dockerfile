@@ -1,23 +1,20 @@
 # Use an official Python runtime as a parent image
-FROM backstopjs/backstopjs:3.9.5
+FROM circleci/php:7.3-node-browsers
 
 # Switch to root user
 USER root
 
-# RUN npm install -g slimerjs
-# RUN npm install -g casperjs
-
 # Install necessary packages for PHP extensions
 RUN apt-get update && \
-  apt-get install -y \
-  libzip-dev \
-  libsodium-dev \
-  libpng-dev \
-  libfreetype6-dev \
-  libjpeg62-turbo-dev \
-  zlib1g-dev \
-  libicu-dev \
-  g++
+     apt-get install -y \
+        libzip-dev \
+        libsodium-dev \
+        libpng-dev \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        zlib1g-dev \
+        libicu-dev \
+        g++
 
 # Add necessary PHP Extensions
 RUN docker-php-ext-configure intl
@@ -53,11 +50,43 @@ RUN gem install circle-cli
 # Parallel Composer downloads
 RUN composer -n global require -n "hirak/prestissimo:^0.3"
 
+# ADD IN BACKSTOPJS
+
+ARG BACKSTOPJS_VERSION
+
+ENV \
+  BACKSTOPJS_VERSION=$BACKSTOPJS_VERSION
+
+# Base packages
+RUN apt-get update && \
+  apt-get install -y git sudo software-properties-common
+
+RUN sudo npm install -g --unsafe-perm=true --allow-root backstopjs@${BACKSTOPJS_VERSION}
+
+RUN wget https://dl-ssl.google.com/linux/linux_signing_key.pub && sudo apt-key add linux_signing_key.pub
+RUN sudo add-apt-repository "deb http://dl.google.com/linux/chrome/deb/ stable main"
+
+RUN	apt-get -y update && apt-get -y install google-chrome-stable
+
+# RUN apt-get install -y firefox-esr
+
+RUN apt-get -qqy update \
+  && apt-get -qqy --no-install-recommends install \
+  libfontconfig \
+  libfreetype6 \
+  xfonts-cyrillic \
+  xfonts-scalable \
+  fonts-liberation \
+  fonts-ipafont-gothic \
+  fonts-wqy-zenhei \
+  && rm -rf /var/lib/apt/lists/* \
+  && apt-get -qyy clean
+
 # Create an unpriviliged test user
 RUN groupadd -g 999 tester && \
-  useradd -r -m -u 999 -g tester tester && \
-  chown -R tester /usr/local && \
-  chown -R tester /build-tools-ci
+    useradd -r -m -u 999 -g tester tester && \
+    chown -R tester /usr/local && \
+    chown -R tester /build-tools-ci
 USER tester
 
 # Install Terminus
@@ -94,3 +123,30 @@ RUN curl -LO https://github.com/github/hub/releases/download/v2.11.2/hub-linux-a
 # Add lab in case anyone wants to automate GitLab MR creation, etc.
 RUN curl -s https://raw.githubusercontent.com/zaquestion/lab/master/install.sh | bash
 
+# Add phpcs for use in checking code style
+RUN mkdir ~/phpcs && cd ~/phpcs && COMPOSER_BIN_DIR=/usr/local/bin composer require squizlabs/php_codesniffer:^2.7
+
+# Add phpunit for unit testing
+RUN mkdir ~/phpunit && cd ~/phpunit && COMPOSER_BIN_DIR=/usr/local/bin composer require phpunit/phpunit:^6
+
+# Add bats for functional testing
+RUN git clone https://github.com/sstephenson/bats.git; bats/install.sh /usr/local
+
+# Add Behat for more functional testing
+RUN mkdir ~/behat && \
+    cd ~/behat && \
+    COMPOSER_BIN_DIR=/usr/local/bin \
+    composer require \
+        "behat/behat:^3.5" \
+        "behat/mink:*" \
+        "behat/mink-extension:^2.2" \
+        "behat/mink-goutte-driver:^1.2" \
+        "drupal/drupal-extension:*"
+
+
+# Install html validator
+RUN npm i site-validator-cli -g
+
+WORKDIR /src
+
+ENTRYPOINT ["backstop"]

@@ -151,3 +151,16 @@ RUN mkdir ~/behat && \
   "behat/mink-extension:^2.2" \
   "behat/mink-goutte-driver:^1.2" \
   "drupal/drupal-extension:*"
+
+# Install A11y Machine Globally
+# RUN npm install -g the-a11y-machine
+
+# Install Pa11y Globally
+RUN npm install -g pa11y
+RUN npm install -g pa11y-ci
+RUN npm install -g pa11y-ci-reporter-html
+
+# Install Axe CLI Globally
+RUN npm install -g axe-cli
+
+RUN npm install -g markdown-to-html

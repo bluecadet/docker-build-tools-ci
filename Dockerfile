@@ -88,6 +88,9 @@ RUN apt-get -qqy update \
   && rm -rf /var/lib/apt/lists/* \
   && apt-get -qyy clean
 
+# Install html validator
+RUN sudo npm i -g site-validator-cli
+
 # Create an unpriviliged test user
 RUN groupadd -g 999 tester && \
   useradd -r -m -u 999 -g tester tester && \

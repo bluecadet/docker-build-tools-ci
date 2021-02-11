@@ -7,6 +7,8 @@ USER root
 # Install necessary packages for PHP extensions
 RUN apt-get update && \
      apt-get install -y \
+        dnsutils \
+        libmagickwand-dev \
         libzip-dev \
         libsodium-dev \
         libpng-dev \

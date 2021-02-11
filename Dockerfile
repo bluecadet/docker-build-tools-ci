@@ -28,6 +28,14 @@ RUN docker-php-ext-install sodium
 RUN pecl install libsodium-2.0.21
 
 
+RUN pecl install imagick
+RUN docker-php-ext-enable imagick
+
+RUN docker-php-ext-install bcmath
+
+
+# Set the memory limit to unlimited for expensive Composer interactions
+RUN echo "memory_limit=-1" > /usr/local/etc/php/conf.d/memory.ini
 
 ###########################
 # Install build tools things
@@ -46,9 +54,6 @@ RUN gem install circle-cli
 
 # Make sure we are on the latest version of Composer
 RUN composer selfupdate
-
-# Parallel Composer downloads
-RUN composer -n global require -n "hirak/prestissimo:^0.3"
 
 # Create an unpriviliged test user
 RUN groupadd -g 999 tester && \
